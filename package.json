@@ -1,0 +1,41 @@
+{
+  "name": "chainlib-bitcoin",
+  "description": "A library for building bitcoin chain based applications.",
+  "author": "BitPay Inc. <dev@bitpay.com>",
+  "contributors": [
+    {
+      "name": "Patrick Nagurny",
+      "email": "patrick@bitpay.com"
+    },
+    {
+      "name": "Braydon Fuller",
+      "email": "braydon@bitpay.com"
+    }
+  ],
+  "main": "index.js",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "NODE_ENV=test mocha --recursive",
+    "coverage": "istanbul cover _mocha -- --recursive"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "bitcoin": "^2.3.0",
+    "bitcore": "^0.12.5",
+    "bitcore-p2p": "^0.14.0",
+    "chainlib": "git+ssh://git@github.com:bitpay/chainlib.git#2537c216371d02d1d7df3be056eec5cc3f34d564",
+    "callback-stream": "^1.0.2",
+    "errno": "^0.1.2",
+    "libbitcoinconsensus": "^0.0.3",
+    "lodash": "^3.5.0",
+    "memdown": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "~1.10.0",
+    "coveralls": "^2.11.2",
+    "istanbul": "^0.3.5",
+    "mocha": "^2.1.0",
+    "proxyquire": "^1.3.1",
+    "sinon": "^1.12.2"
+  }
+}
