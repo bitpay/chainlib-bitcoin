@@ -23,7 +23,7 @@
     "bitcoin": "^2.3.0",
     "bitcore": "^0.12.5",
     "bitcore-p2p": "^0.14.0",
-    "chainlib": "git+ssh://git@github.com:bitpay/chainlib.git#2537c216371d02d1d7df3be056eec5cc3f34d564",
+    "chainlib": "^0.0.1",
     "callback-stream": "^1.0.2",
     "errno": "^0.1.2",
     "libbitcoinconsensus": "^0.0.3",
