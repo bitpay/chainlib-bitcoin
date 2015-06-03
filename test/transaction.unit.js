@@ -103,6 +103,22 @@ describe('Bitcoin Transaction', function() {
     });
   });
 
+  describe('#populateInputs', function() {
+    it('will call _populateInput with transactions', function() {
+      var tx = new Transaction();
+      tx._populateInput = sinon.stub().callsArg(3);
+      tx.inputs = ['input'];
+      var transactions = [];
+      var db = {};
+      tx.populateInputs(db, transactions, function(err) {
+        tx._populateInput.callCount.should.equal(1);
+        tx._populateInput.args[0][0].should.equal(db);
+        tx._populateInput.args[0][1].should.equal('input');
+        tx._populateInput.args[0][2].should.equal(transactions);
+      });
+    });
+  });
+
   describe('#_populateInput', function() {
     var input = {
       prevTxId: new Buffer('d6cffbb343a6a41eeaa199478c985493843bfe6a59d674a5c188787416cbcda3', 'hex'),
