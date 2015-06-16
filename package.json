@@ -13,7 +13,7 @@
     }
   ],
   "main": "index.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "test": "NODE_ENV=test mocha --recursive",
     "coverage": "istanbul cover _mocha -- --recursive"
@@ -23,7 +23,7 @@
     "bitcoin": "^2.3.0",
     "bitcore": "^0.12.5",
     "bitcore-p2p": "^0.14.0",
-    "chainlib": "^0.0.2",
+    "chainlib": "^0.0.3",
     "callback-stream": "^1.0.2",
     "errno": "^0.1.2",
     "leveldown": "^1.2.2",
