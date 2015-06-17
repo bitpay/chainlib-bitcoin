@@ -58,6 +58,57 @@ node.chain.on('addblock', function(block) {
 
 ```
 
+### API Documentation
+
+Get Unspent Outputs
+
+```js
+var address = '15vkcKf7gB23wLAnZLmbVuMiiVDc1Nm4a2';
+var includeMempool = true;
+node.getUnspentOutputs(address, includeMempool, function(err, unspentOutputs) {
+  //...
+});
+```
+
+View Balances
+
+```js
+var address = '15vkcKf7gB23wLAnZLmbVuMiiVDc1Nm4a2';
+var includeMempool = true;
+node.getBalance(address, includeMempool, function(err, balance) {
+  //...
+});
+```
+
+Get Outputs
+
+```js
+var address = '15vkcKf7gB23wLAnZLmbVuMiiVDc1Nm4a2';
+var includeMempool = true;
+node.getOutputs(address, includeMempool, function(err, outputs) {
+  //...
+});
+```
+
+Get Transaction
+
+```js
+var txid = 'c349b124b820fe6e32136c30e99f6c4f115fce4d750838edf0c46d3cb4d7281e';
+var includeMempool = true;
+node.getTransaction(txid, includeMempool, function(err, transaction) {
+  //...
+});
+```
+
+Get Block
+
+```js
+var blockHash = '00000000d17332a156a807b25bc5a2e041d2c730628ceb77e75841056082a2c2';
+node.getBlock(blockHash, function(err, block) {
+  //...
+});
+```
+
 ### Tests and Coverage
 
 To run all of the tests:
