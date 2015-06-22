@@ -412,6 +412,96 @@ describe('Bitcoin DB', function() {
     });
   });
 
+  describe('#_updateTransactions', function() {
+    it('should remove conflicting mempool transactions', function(done) {
+      var mempoolTransactions = [
+        {
+          inputs: [
+            {
+              prevTxId: 'tx1',
+              outputIndex: 'out1'
+            },
+            {
+              prevTxId: 'tx2',
+              outputIndex: 'out2'
+            }
+          ],
+          hash: 'hash1'
+        },
+        {
+          inputs: [
+            {
+              prevTxId: 'tx3',
+              outputIndex: 'out3'
+            },
+            {
+              prevTxId: 'tx4',
+              outputIndex: 'out4'
+            }
+          ],
+          hash: 'hash2'
+        }
+      ];
+
+      var blockTransactions = [
+        {
+          inputs: [
+            {
+              prevTxId: 'tx1',
+              outputIndex: 'out1'
+            },
+            {
+              prevTxId: 'tx6',
+              outputIndex: 'out6'
+            }
+          ],
+          hash: 'hash3'
+        },
+        {
+          inputs: [
+            {
+              prevTxId: 'tx7',
+              outputIndex: 'out7'
+            },
+            {
+              prevTxId: 'tx8',
+              outputIndex: 'out8'
+            }
+          ],
+          hash: 'hash4'
+        }
+      ];
+
+      var db = new DB({store: memdown});
+      sinon.stub(DB.super_.prototype, '_updateTransactions').callsArgWith(2, null, []);
+
+      db.mempool = {
+        getTransactions: sinon.stub().returns(mempoolTransactions)
+      };
+      db.getTransactionsFromBlock = sinon.stub().returns(blockTransactions);
+
+      db._updateTransactions('block', true, function(err, operations) {
+        should.not.exist(err);
+        db.mempool.transactions.length.should.equal(1);
+        db.mempool.transactions[0].hash.should.equal('hash2');
+        DB.super_.prototype._updateTransactions.restore();
+        done();
+      });
+    });
+
+    it('should give an error if parent _updateTransactions gives an error', function(done) {
+      var db = new DB({store: memdown});
+      sinon.stub(DB.super_.prototype, '_updateTransactions').callsArgWith(2, new Error('error'));
+
+      db._updateTransactions('block', true, function(err, operations) {
+        should.exist(err);
+        err.message.should.equal('error');
+        DB.super_.prototype._updateTransactions.restore();
+        done();
+      });
+    });
+  });
+
   describe('#_onChainAddBlock', function() {
     var db = new DB({path: 'path', store: memdown});
     db._updateOutputs = sinon.stub().callsArgWith(2, null, ['1a', '1b']);
