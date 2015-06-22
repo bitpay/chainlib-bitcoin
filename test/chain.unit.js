@@ -284,6 +284,23 @@ describe('Bitcoin Chain', function() {
         done();
       });
     });
+    it('should return the cached weight as a BN if it was a string', function(done) {
+      var chain = new Chain();
+      chain.cache = {
+        weights: {
+          'hash': '5'
+        }
+      };
+      var block = {
+        hash: 'hash'
+      };
+
+      chain.getBlockWeight(block.hash, function(err, weight) {
+        should.not.exist(err);
+        weight.toString(10).should.equal('5');
+        done();
+      });
+    });
   });
 
   describe('Bitcoin POW', function() {
