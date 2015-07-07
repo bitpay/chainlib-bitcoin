@@ -2,6 +2,7 @@
 
 module.exports = {};
 module.exports.RPCNode = require('./lib/rpc');
+module.exports.BitcoindNode = require('./lib/bitcoind');
 module.exports.Node = require('./lib/node');
 module.exports.Block = require('./lib/block');
 module.exports.Chain = require('./lib/chain');
