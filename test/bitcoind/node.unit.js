@@ -153,6 +153,17 @@ describe('Bitcoind Node', function() {
       node._initializeBitcoind();
       node.bitcoind.emit('ready');
     });
+    it('will call emit an error from bitcoind.js', function(done) {
+      var node = new Node({});
+      node.bitcoind = new EventEmitter();
+      node.on('error', function(err) {
+        should.exist(err);
+        err.message.should.equal('test error');
+        done();
+      });
+      node._initializeBitcoind();
+      node.bitcoind.emit('error', new Error('test error'));
+    });
   });
 
   describe('#_initializeDatabase', function() {
@@ -175,6 +186,17 @@ describe('Bitcoind Node', function() {
       node._initializeDatabase();
       node.db.emit('ready');
     });
+    it('will call emit an error from db', function(done) {
+      var node = new Node({});
+      node.db = new EventEmitter();
+      node.on('error', function(err) {
+        should.exist(err);
+        err.message.should.equal('test error');
+        done();
+      });
+      node._initializeDatabase();
+      node.db.emit('error', new Error('test error'));
+    });
   });
 
   describe('#_initializeChain', function() {
@@ -196,6 +218,17 @@ describe('Bitcoind Node', function() {
       node._initializeChain();
       node.chain.emit('ready');
     });
+    it('will call emit an error from chain', function(done) {
+      var node = new Node({});
+      node.chain = new EventEmitter();
+      node.on('error', function(err) {
+        should.exist(err);
+        err.message.should.equal('test error');
+        done();
+      });
+      node._initializeChain();
+      node.chain.emit('error', new Error('test error'));
+    });
   });
 
   describe('#_initializeP2P', function() {
@@ -210,6 +243,17 @@ describe('Bitcoind Node', function() {
       });
       node._initializeP2P();
       node.p2p.emit('ready');
+    });
+    it('will call emit an error from p2p', function(done) {
+      var node = new Node({});
+      node.p2p = new EventEmitter();
+      node.on('error', function(err) {
+        should.exist(err);
+        err.message.should.equal('test error');
+        done();
+      });
+      node._initializeP2P();
+      node.p2p.emit('error', new Error('test error'));
     });
   });
 
