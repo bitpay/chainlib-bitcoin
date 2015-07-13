@@ -10,11 +10,17 @@ var Chain = bitcoinlib.RPCNode.Chain;
 var Reorg = chainlib.Reorg;
 
 describe('RPC Chain', function() {
-  describe('#_checkExisting', function() {
-    it('should call the callback', function(done) {
+  describe('#_writeBlock', function() {
+    it('should update hashes and call putBlock', function(done) {
       var chain = new Chain();
-      chain._checkExisting('block', function(err) {
+      chain.db = {
+        putBlock: sinon.stub().callsArg(1)
+      };
+
+      chain._writeBlock({hash: 'hash', prevHash: 'prevhash'}, function(err) {
         should.not.exist(err);
+        chain.db.putBlock.callCount.should.equal(1);
+        chain.cache.hashes.hash.should.equal('prevhash');
         done();
       });
     });
