@@ -3,7 +3,7 @@
 var should = require('chai').should();
 var bitcoinlib = require('../../');
 var sinon = require('sinon');
-var Chain = bitcoinlib.RPCNode.Chain;
+var Chain = bitcoinlib.BitcoindNode.Chain;
 
 describe('Bitcoind Chain', function() {
 
