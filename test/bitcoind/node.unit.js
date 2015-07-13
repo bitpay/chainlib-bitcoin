@@ -57,9 +57,14 @@ describe('Bitcoind Node', function() {
     });
   });
   describe('#_loadBitcoind', function() {
-    it('should initialize ', function() {
+    it('should initialize', function() {
       var node = new Node({});
       node._loadBitcoind({});
+      should.exist(node.bitcoind);
+    });
+    it('should initialize with testnet', function() {
+      var node = new Node({});
+      node._loadBitcoind({testnet: true});
       should.exist(node.bitcoind);
     });
   });
@@ -349,6 +354,15 @@ describe('Bitcoind Node', function() {
       });
       node._initializeP2P();
       node.p2p.emit('error', new Error('test error'));
+    });
+    it('will relay synced event from p2p to node', function(done) {
+      var node = new Node({});
+      node.p2p = new EventEmitter();
+      node.on('synced', function() {
+        done();
+      });
+      node._initializeP2P();
+      node.p2p.emit('synced');
     });
   });
 
