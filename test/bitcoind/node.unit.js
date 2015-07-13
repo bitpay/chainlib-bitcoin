@@ -4,13 +4,12 @@ var should = require('chai').should();
 var sinon = require('sinon');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
-
 var bitcore = require('bitcore');
 var Networks = bitcore.Networks;
-
+var blockData = require('../data/livenet-345003.json');
+var Block = require('../../lib/block');
 var proxyquire = require('proxyquire');
 var chainlib = require('chainlib');
-
 var OriginalNode = chainlib.Node;
 
 var BaseNode = function() {};
@@ -50,12 +49,92 @@ describe('Bitcoind Node', function() {
       node._syncBitcoind.callCount.should.equal(1);
       node.p2p.disableSync.should.equal(true);
     });
+    it('will error with an unknown strategy', function() {
+      var node = new Node({});
+      (function(){
+        node.setSyncStrategy('unknown');
+      }).should.throw('Strategy "unknown" is unknown');
+    });
   });
   describe('#_loadBitcoind', function() {
     it('should initialize ', function() {
       var node = new Node({});
       node._loadBitcoind({});
       should.exist(node.bitcoind);
+    });
+  });
+  describe('#_syncBitcoind', function() {
+    it('will get and add block up to the tip height', function(done) {
+      var node = new Node({});
+      node.p2p = {
+        synced: false
+      };
+      node.Block = Block;
+      node.syncStrategy = Node.SYNC_STRATEGIES.BITCOIND;
+      node.setSyncStrategy = sinon.stub();
+      node.bitcoind = {
+        getInfo: sinon.stub().returns({blocks: 2}),
+        getBlock: sinon.stub().callsArgWith(1, null, new Buffer(blockData))
+      };
+      node.chain = {
+        tip: {
+          __height: 0
+        },
+        addBlock: function(block, callback) {
+          node.chain.tip.__height += 1;
+          callback();
+        }
+      };
+      node.on('synced', function() {
+        node.p2p.synced.should.equal(true);
+        node.setSyncStrategy.callCount.should.equal(1);
+        done();
+      });
+      node._syncBitcoind();
+    });
+    it('will exit and emit error with error from bitcoind.getBlock', function(done) {
+      var node = new Node({});
+      node.p2p = {
+        synced: false
+      };
+      node.syncStrategy = Node.SYNC_STRATEGIES.BITCOIND;
+      node.setSyncStrategy = sinon.stub();
+      node.bitcoind = {
+        getInfo: sinon.stub().returns({blocks: 2}),
+        getBlock: sinon.stub().callsArgWith(1, new Error('test error'))
+      };
+      node.chain = {
+        tip: {
+          __height: 0
+        }
+      };
+      node.on('error', function(err) {
+        err.message.should.equal('test error');
+        done();
+      });
+      node._syncBitcoind();
+    });
+    it('will exit if sync strategy is changed to bitcoind', function(done) {
+      var node = new Node({});
+      node.p2p = {
+        synced: false
+      };
+      node.syncStrategy = Node.SYNC_STRATEGIES.P2P;
+      node.setSyncStrategy = sinon.stub();
+      node.bitcoind = {
+        getInfo: sinon.stub().returns({blocks: 2})
+      };
+      node.chain = {
+        tip: {
+          __height: 0
+        }
+      };
+      node.on('synced', function() {
+        node.p2p.synced.should.equal(true);
+        node.setSyncStrategy.callCount.should.equal(1);
+        done();
+      });
+      node._syncBitcoind();
     });
   });
   describe('#_loadNetwork', function() {
