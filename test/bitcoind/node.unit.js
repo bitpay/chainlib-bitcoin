@@ -146,7 +146,6 @@ describe('Bitcoind Node', function() {
           chainlib.log.info.callCount.should.equal(1);
           chainlib.log.info.restore();
           node.db.initialize.callCount.should.equal(1);
-          node.db.bitcoind.should.equal(node.bitcoind);
           done();
         });
       });
@@ -179,7 +178,6 @@ describe('Bitcoind Node', function() {
           chainlib.log.info.callCount.should.equal(1);
           chainlib.log.info.restore();
           node.chain.initialize.callCount.should.equal(1);
-          node.chain.db.should.equal(node.db);
           done();
         });
       });
@@ -263,6 +261,7 @@ describe('Bitcoind Node', function() {
       var node = new Node({});
       node.chain = {};
       node.Block = 'Block';
+      node.bitcoind = 'bitcoind';
       node.p2p = {};
       node.db = {};
 
@@ -275,8 +274,10 @@ describe('Bitcoind Node', function() {
       // references
       node.db.chain.should.equal(node.chain);
       node.db.Block.should.equal(node.Block);
+      node.db.bitcoind.should.equal(node.bitcoind);
       node.chain.db.should.equal(node.db);
       node.chain.p2p.should.equal(node.p2p);
+      node.chain.db.should.equal(node.db);
       node.p2p.db.should.equal(node.db);
       node.p2p.chain.should.equal(node.chain);
 
