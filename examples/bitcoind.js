@@ -1,13 +1,15 @@
 'use strict';
 
-var BitcoinNode = require('../').RPCNode;
+var BitcoinNode = require('../').BitcoindNode;
+var chainlib = require('chainlib');
+var log = chainlib.log;
 
 var privkey = 'tprv8ZgxMBicQKsPdj1QowoT9z1tY5Et38qaMjCHZVoPdPFb6narfmYkqTygEVHfUmY78k3HcaEpkyNCAQDANaXtwNe1HLFvcA7nqYj1B7wTSTo';
 
 var configuration = {
   db: {
     xprivkey: privkey,
-    path: './bitcoin-testnet.db'
+    path: './bitcoind.db'
   },
   p2p: {
     addrs: [
@@ -15,26 +17,18 @@ var configuration = {
         ip: {
           v4: '127.0.0.1'
         },
-        port: 18333
+        port: 8333
       }
     ],
     dnsSeed: false
   },
-  rpc: {
-    host: 'localhost',
-    port: 18332,
-    user: 'bitcoin',
-    pass: 'local321',
-    ssl: false,
-    sslStrict: false
-  },
-  testnet: true
+  testnet: false
 };
 
 var node = new BitcoinNode(configuration);
 
 node.on('error', function(err) {
-  console.log(err);
+  log.error(err);
 });
 
 node.chain.on('addblock', function(block) {

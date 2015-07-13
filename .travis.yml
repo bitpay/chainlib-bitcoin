@@ -1,6 +1,14 @@
 language: node_js
+sudo: false
 node_js:
-- '0.10'
+- '0.12'
+addons:
+  apt:
+    packages:
+      - libboost-all-dev
+before_install:
+  - git config --global user.email "dev@bitpay.com"
+  - git config --global user.name "BitPay, Inc."
 after_script:
 - npm run coverage
 - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
