@@ -23,8 +23,8 @@ var configuration = {
   rpc: {
     host: 'localhost',
     port: 18332,
-    user: 'user',
-    pass: 'password',
+    user: 'bitcoin',
+    pass: 'local321',
     ssl: false,
     sslStrict: false
   },
@@ -32,6 +32,10 @@ var configuration = {
 };
 
 var node = new BitcoinNode(configuration);
+
+node.on('error', function(err) {
+  console.log(err);
+});
 
 node.chain.on('addblock', function(block) {
   console.log('New Best Tip:', block.hash);
