@@ -33,6 +33,24 @@ describe('Bitcoind Node', function() {
       BaseNode.prototype._loadConfiguration.called.should.equal(true);
     });
   });
+  describe('#setSyncStrategy', function() {
+    it('will call p2p.startSync', function() {
+      var node = new Node({});
+      node.p2p = {
+        startSync: sinon.spy()
+      };
+      node.setSyncStrategy(Node.SYNC_STRATEGIES.P2P);
+      node.p2p.startSync.callCount.should.equal(1);
+    });
+    it('will call this._syncBitcoind and disable p2p sync', function() {
+      var node = new Node({});
+      node.p2p = {};
+      node._syncBitcoind = sinon.spy();
+      node.setSyncStrategy(Node.SYNC_STRATEGIES.BITCOIND);
+      node._syncBitcoind.callCount.should.equal(1);
+      node.p2p.disableSync.should.equal(true);
+    });
+  });
   describe('#_loadBitcoind', function() {
     it('should initialize ', function() {
       var node = new Node({});
@@ -257,7 +275,7 @@ describe('Bitcoind Node', function() {
 
   describe('#_initialize', function() {
 
-    it('should initialize', function() {
+    it('should initialize', function(done) {
       var node = new Node({});
       node.chain = {};
       node.Block = 'Block';
@@ -286,6 +304,15 @@ describe('Bitcoind Node', function() {
       node._initializeDatabase.callCount.should.equal(1);
       node._initializeChain.callCount.should.equal(1);
       node._initializeP2P.callCount.should.equal(1);
+
+      // start syncing
+      node.setSyncStrategy = sinon.spy();
+      node.on('ready', function() {
+        node.setSyncStrategy.callCount.should.equal(1);
+        done();
+      });
+      node.emit('ready');
+
     });
 
   });
