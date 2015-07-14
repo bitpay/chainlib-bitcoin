@@ -21,7 +21,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "bitcoin": "^2.3.0",
-    "bitcoind.js": "https://github.com/bitpay/bitcoind.js#5d346077e171b113a2bb510196aed9ed731c180f",
+    "bitcoind.js": "https://github.com/bitpay/bitcoind.js#89e757b25a31a62a3142c104e6c3a634c81c85df",
     "bitcore": "^0.12.5",
     "bitcore-p2p": "^0.14.0",
     "chainlib": "^0.1.1",
