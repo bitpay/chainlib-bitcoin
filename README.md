@@ -5,6 +5,8 @@ ChainLib Bitcoin
 
 A library for building Bitcoin chain based databases.
 
+**Chainlib-bitcoin is not actively maintained anymore. Please check out [bitcoind.js](https://github.com/bitpay/bitcoind.js), which is similar, but runs bitcoind in the same node process and uses it to query blocks, transactions, unspent outputs and the mempool.**
+
 ## Getting Started
 
 ### Install
